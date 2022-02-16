@@ -27,9 +27,19 @@ function App() {
   const [list,setList] = useState ([]);
   const [selectedItem,setSelectedItem]= useState('');
   const url = 'https://62017a52fdf5090017249a32.mockapi.io/items';
-  const [logged]= useState(false);
+  const [logged, setLogged]= useState(false);
+  const [loggedUser, setLoggedUser]=useState('')
 
-  
+  console.log(logged)
+
+  //toggle logged status
+  function toggleLogged(){
+    setLogged(!logged)
+  }
+
+  function userId(user){
+    setLoggedUser(user)
+  }
 
 
   //fetch selectedItem from Mockapi
@@ -150,7 +160,7 @@ function App() {
  
   return (
     <div className="App">
-      <LoggedValue.Provider value={logged}>
+      <LoggedValue.Provider value={logged} loggedUser={loggedUser}>
       <h1>CRUD WITH REACT</h1>
       <BrowserRouter>
         <nav className="navbar justify-content-center navbar-expand-lg navbar-light bg-light">
@@ -161,10 +171,10 @@ function App() {
             <li className="nav-item">
               <Link className="nav-link navbar-brand" to= "/add"> Add </Link>
             </li>
-            {!logged &&
+            {!logged ?
             <li className="nav-item">
               <Link className="nav-link navbar-brand" to= "/user "> User </Link>
-            </li>}
+            </li> : <button className="btn btn-danger" onClick={toggleLogged}>Logout</button>}
           </ul>
         </nav>
         <Routes>
@@ -172,8 +182,8 @@ function App() {
             <Route path="/add" element={<AddItem onAdd={addItem}/>}/>
             <Route path="/item/:id" element={<ItemInfo getItem={getItem} item={selectedItem}/>}/>
             <Route path="/editItem/:id" element={<EditItem list={list} item={selectedItem} getItem={getItem} onAdd={modifyItem}/>}/>
-            <Route path="/user" element={<User/>} />
-            <Route path="/register" element={<Register/>}/>
+            <Route path="/user" element={<User onLoggin={toggleLogged} />} />
+            <Route path="/register" element={<Register onLoggin={toggleLogged}/>}/>
         </Routes>
       </BrowserRouter>
       <Footer/>

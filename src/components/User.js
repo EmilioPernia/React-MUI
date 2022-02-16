@@ -1,18 +1,20 @@
 import React, { useState, useContext } from 'react'
 import { LoggedValue } from '../App'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
-const User = () => {
+const User = ({onLoggin}) => {
 
-    let isLogged = useContext(LoggedValue);
-    
+  let isLogged = useContext(LoggedValue);  
+
+  const navigate = useNavigate();
 
   const checkLoggin=(e)=>{
       e.preventDefault()
     if(email && password){
         
         alert(email + "logged successfully")
-        
+        onLoggin();
+        navigate("/")
         //else handle 
     }else{
         alert("both fields must be filled")

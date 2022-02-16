@@ -10,10 +10,8 @@ const EditItem = ({ getItem, item, onAdd }) => {
   useEffect(()=>{
     getItem(id)
   },[])
- 
-  
-  console.log(item)
 
+  //set const/form
   const [name, setName] = useState('')
   const [color, setColor] = useState('')
   const [price, setPrice] = useState('')
