@@ -1,22 +1,29 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
-const EditItem = ({ list, onAdd }) => {
+const EditItem = ({ getItem, item, onAdd }) => {
 
-
-  const navigate=useNavigate()
   const { id } = useParams();
-  const i = list.find((item) => {
-    return item.id === id
-  })
+  const navigate=useNavigate();
 
-  console.log(i)
 
-  const [name, setName] = useState(i.name)
+  useEffect(()=>{
+    getItem(id)
+  },[])
+ 
+  
+  console.log(item)
+
+  const [name, setName] = useState('')
   const [color, setColor] = useState('')
   const [price, setPrice] = useState('')
   const [existance, setExistance] = useState(false)
 
+  // if(item){
+  //   //sigo sin estender porque el bucle
+  // }
+  
+  
   //use context
 
   function onSubmit(e) {
@@ -32,19 +39,16 @@ const EditItem = ({ list, onAdd }) => {
   }
 
 
-  if (!i) {
+  if (!item) {
     return <h4>"Loading..." </h4>
-  } else {
+  }else{
     return (
-
-      //si seteo name, color, price y existance para colocarlos con valor en valor del input, creo un bucle
-
-      <div>{!i ? "Loading" :
+      <div>
         <form>
           <div>
             <label>Item Name</label>
             <input type="text"
-              placeholder={i.name}
+              placeholder={item.name}
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
@@ -52,7 +56,7 @@ const EditItem = ({ list, onAdd }) => {
           <div>
             <label>Item Color</label>
             <input type="text"
-              placeholder={i.color}
+              placeholder={item.color}
               value={color}
               onChange={(e) => setColor(e.target.value)}
             />
@@ -60,7 +64,7 @@ const EditItem = ({ list, onAdd }) => {
           <div>
             <label>Item Price</label>
             <input type="number"
-              placeholder={i.price}
+              placeholder={item.price}
               value={price}
               onChange={(e) => setPrice(e.target.value)}
             />
@@ -75,7 +79,7 @@ const EditItem = ({ list, onAdd }) => {
           </div>
           <button className="btn btn-outline-success" onClick={onSubmit}>SUBMIT</button>
 
-        </form>}
+        </form>
         <Link to="/"><button className="btn btn-outline-secondary">BACK</button></Link>
       </div>
     )

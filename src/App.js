@@ -1,6 +1,6 @@
-
+//react librery
 import './App.css';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BrowserRouter,
   Routes,
@@ -8,11 +8,17 @@ import {
   Link
 } from "react-router-dom"
 
+
+//components
 import Footer from './components/Footer';
-import AddItem from './components/AddItem'
-import Home from './components/Home'
+import AddItem from './components/AddItem';
+import Home from './components/Home';
 import ItemInfo from './components/ItemInfo';
 import EditItem from './components/EditItem';
+import User from './components/User';
+import Register from './components/Register';
+
+export const LoggedValue= React.createContext();
 
 
 
@@ -21,9 +27,12 @@ function App() {
   const [list,setList] = useState ([]);
   const [selectedItem,setSelectedItem]= useState('');
   const url = 'https://62017a52fdf5090017249a32.mockapi.io/items';
+  const [logged]= useState(false);
+
+  
 
 
-  //hacer fetch del selectedItem
+  //fetch selectedItem from Mockapi
   async function fetchItem(id){
     const res = await fetch(`${url}/${id}`);
     try{
@@ -40,14 +49,14 @@ function App() {
     
     
   }
-  //setSelectedItem con json
+  //setSelectedItem with json
   async function getItem(id){
     const i= await fetchItem(id);
     setSelectedItem(i)    
   }
 
  
-  //fetch json
+  //fetch list from Mockapi
   async function fetchList(){
     const res = await fetch(url);
     try{
@@ -64,17 +73,18 @@ function App() {
     
     
   }
-  //setList con json
+  //setList with json
   async function getList(){
     const items= await fetchList();
     setList(items)
   }
   
-  
+  //on page load
   useEffect(()=>{
     getList()
   },[])
 
+  //add Item and redirect to home
   const addItem= async (item)=>{
     console.log(item)
     let newItem={
@@ -101,6 +111,7 @@ function App() {
     }
   }
 
+  //modify Item and redireect to home
   const modifyItem=async (item)=>{
     try {
       let res = await fetch(`${url}/${item.id}`,{
@@ -118,6 +129,7 @@ function App() {
     }
   }
 
+  //delete Item and get List
   const deleteItem=async(id)=>{
     console.log(id)
     try {
@@ -138,8 +150,8 @@ function App() {
  
   return (
     <div className="App">
-      
-      <h1>Page Name</h1>
+      <LoggedValue.Provider value={logged}>
+      <h1>CRUD WITH REACT</h1>
       <BrowserRouter>
         <nav className="navbar justify-content-center navbar-expand-lg navbar-light bg-light">
           <ul className="nav">
@@ -147,18 +159,25 @@ function App() {
               <Link className="nav-link navbar-brand" to= "/"> Home </Link>
             </li>
             <li className="nav-item">
-            <Link className="nav-link navbar-brand" to= "/add"> Add </Link>
+              <Link className="nav-link navbar-brand" to= "/add"> Add </Link>
             </li>
+            {!logged &&
+            <li className="nav-item">
+              <Link className="nav-link navbar-brand" to= "/user "> User </Link>
+            </li>}
           </ul>
         </nav>
         <Routes>
             <Route path="/" element={<Home list={list} onDelete={deleteItem}/>} />
             <Route path="/add" element={<AddItem onAdd={addItem}/>}/>
             <Route path="/item/:id" element={<ItemInfo getItem={getItem} item={selectedItem}/>}/>
-            <Route path="/editItem/:id" element={<EditItem list={list} onAdd={modifyItem}/>}/>
+            <Route path="/editItem/:id" element={<EditItem list={list} item={selectedItem} getItem={getItem} onAdd={modifyItem}/>}/>
+            <Route path="/user" element={<User/>} />
+            <Route path="/register" element={<Register/>}/>
         </Routes>
       </BrowserRouter>
       <Footer/>
+      </LoggedValue.Provider>
     </div>
   );
 }
