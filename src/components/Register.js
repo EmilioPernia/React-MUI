@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { UserContext } from './UserContext'
 
-const Register = ({onLoggin}) => {
+const Register = () => {
 
     const navigate = useNavigate()
+    const {user,setUser} = useContext(UserContext)
 
     //set const/form
     const [firstname, setFirstname] = useState('')
@@ -27,7 +29,7 @@ const Register = ({onLoggin}) => {
         }else{
             console.log("Firstname: " + firstname + ", lastname: " + lastname)
             alert("You've successfully registered")
-            onLoggin();
+            setUser(email)
             navigate("/")
 
         }

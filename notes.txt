@@ -1,6 +1,5 @@
-https://www.youtube.com/watch?v=4X9YbQBcmL0&ab_channel=TheNetNinja ruteo v6
-https://www.youtube.com/watch?v=zCgruoRUxlk&ab_channel=TheNetNinja navigate
+ruteo v6:       https://www.youtube.com/watch?v=4X9YbQBcmL0&ab_channel=TheNetNinja 
+useNavigate:    https://www.youtube.com/watch?v=zCgruoRUxlk&ab_channel=TheNetNinja 
 
-fix with heroku: https://stackoverflow.com/questions/43262121/trying-to-use-fetch-and-pass-in-mode-no-cors
-
-useContext https://www.youtube.com/watch?v=5LrDIWkK_Bc&ab_channel=WebDevSimplified
+useContext  https://www.youtube.com/watch?v=5LrDIWkK_Bc&ab_channel=WebDevSimplified
+            https://www.youtube.com/watch?v=lhMKvyLRWo0&ab_channel=BenAwad

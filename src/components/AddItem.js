@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { UserContext } from './UserContext'
 
 const AddItem = ({onAdd}) => {
 
   const navigate=useNavigate()
+  const {user}=useContext(UserContext);
 
   const[name,setName]=useState("")
   const[color,setColor]=useState("")
@@ -17,6 +19,8 @@ const AddItem = ({onAdd}) => {
       alert("All inputs must be filled ")
     }else if(price<=0){
       alert("price must be a positive number")
+    }else if(!user){
+      alert("You have to loggin in order to add an item")
     }else{
       onAdd({name,color,price,existance})
       // hacer un redirect a Home

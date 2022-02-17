@@ -1,6 +1,7 @@
 //react librery
 import './App.css';
 import React, { useEffect, useState } from 'react';
+import {UserContext} from './components/UserContext'
 import {
   BrowserRouter,
   Routes,
@@ -18,7 +19,6 @@ import EditItem from './components/EditItem';
 import User from './components/User';
 import Register from './components/Register';
 
-export const LoggedValue= React.createContext();
 
 
 
@@ -27,20 +27,9 @@ function App() {
   const [list,setList] = useState ([]);
   const [selectedItem,setSelectedItem]= useState('');
   const url = 'https://62017a52fdf5090017249a32.mockapi.io/items';
-  const [logged, setLogged]= useState(false);
-  const [loggedUser, setLoggedUser]=useState('')
+  const [ user, setUser] = useState(null)
 
-  console.log(logged)
-
-  //toggle logged status
-  function toggleLogged(){
-    setLogged(!logged)
-  }
-
-  function userId(user){
-    setLoggedUser(user)
-  }
-
+ 
 
   //fetch selectedItem from Mockapi
   async function fetchItem(id){
@@ -160,8 +149,8 @@ function App() {
  
   return (
     <div className="App">
-      <LoggedValue.Provider value={logged} loggedUser={loggedUser}>
-      <h1>CRUD WITH REACT</h1>
+      <UserContext.Provider value={{user,setUser}}>
+      <h1>CRUD WITH REACT</h1>{user && <p>User: {user}</p>}
       <BrowserRouter>
         <nav className="navbar justify-content-center navbar-expand-lg navbar-light bg-light">
           <ul className="nav">
@@ -171,10 +160,12 @@ function App() {
             <li className="nav-item">
               <Link className="nav-link navbar-brand" to= "/add"> Add </Link>
             </li>
-            {!logged ?
+            {!user?
             <li className="nav-item">
               <Link className="nav-link navbar-brand" to= "/user "> User </Link>
-            </li> : <button className="btn btn-danger" onClick={toggleLogged}>Logout</button>}
+            </li>:
+              <button className="btn btn-danger" onClick={()=>setUser(null)}>Logout</button>
+            }
           </ul>
         </nav>
         <Routes>
@@ -182,12 +173,12 @@ function App() {
             <Route path="/add" element={<AddItem onAdd={addItem}/>}/>
             <Route path="/item/:id" element={<ItemInfo getItem={getItem} item={selectedItem}/>}/>
             <Route path="/editItem/:id" element={<EditItem list={list} item={selectedItem} getItem={getItem} onAdd={modifyItem}/>}/>
-            <Route path="/user" element={<User onLoggin={toggleLogged} />} />
-            <Route path="/register" element={<Register onLoggin={toggleLogged}/>}/>
+            <Route path="/user" element={<User />} />
+            <Route path="/register" element={<Register />}/>
         </Routes>
       </BrowserRouter>
       <Footer/>
-      </LoggedValue.Provider>
+      </UserContext.Provider>
     </div>
   );
 }
